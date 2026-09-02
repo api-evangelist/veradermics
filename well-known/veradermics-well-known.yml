@@ -1,0 +1,62 @@
+generated: '2026-09-02'
+method: probed
+source: live anonymous GET of the named /.well-known/ path list on every host in apis.yml
+note: >-
+  Two of the probed paths return real, parsing JSON documents — RFC 8414 authorization
+  server metadata and RFC 9728 protected resource metadata. Both are served by the
+  WordPress MCP Adapter / OAuth layer running on the company's own marketing site, not
+  by a Veradermics developer program. They are recorded here because they are genuinely
+  served from a host Veradermics controls and the issuer they name is
+  https://www.veradermics.com, but a reader should not mistake them for a product API.
+  Every other named path returns the site's 404 HTML shell.
+hosts:
+- host: www.veradermics.com
+  documents:
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    file: veradermics-oauth-authorization-server.json
+    content_type: application/json
+    note: >-
+      301 to the trailing-slash form, then 200. RFC 8414 metadata; issuer
+      https://www.veradermics.com, authorization_code + refresh_token grants, PKCE S256
+      required, single scope "mcp", public clients (token_endpoint_auth_methods_supported
+      "none"), client_id_metadata_document_supported true.
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    file: veradermics-oauth-protected-resource.json
+    content_type: application/json
+    note: >-
+      301 to the trailing-slash form, then 200. RFC 9728 metadata naming the protected
+      resource https://www.veradermics.com/wp-json/mcp/mcp-oauth-server and bearer
+      header auth with scope "mcp".
+  - path: /.well-known/security.txt
+    status: 404
+    file: null
+  - path: /.well-known/openid-configuration
+    status: 404
+    file: null
+  - path: /.well-known/api-catalog
+    status: 404
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 404
+    file: null
+  - path: /.well-known/agent.json
+    status: 404
+    file: null
+  - path: /.well-known/aauth-resource.json
+    status: 404
+    file: null
+- host: ir.veradermics.com
+  note: >-
+    Investor-relations portal fronted by Akamai (CNAME veradermics.gcs-web.com). Every
+    request from this probe, including with a browser User-Agent, is answered with an
+    Akamai "Access Denied" edge page, so no /.well-known/ path could be evaluated. This
+    is an edge bot policy, not evidence of absence.
+  documents:
+  - path: /
+    status: 403
+    file: null

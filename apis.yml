@@ -1,17 +1,35 @@
 aid: veradermics
-name: VeraDermics
-description: 'VeraDermics is a company surfaced via the API Evangelist harvest backlog (source: secondary-market)
-  and added to the network as a stub for full-pipeline profiling.'
+name: Veradermics
+description: 'Veradermics is a dermatologist-founded, late clinical-stage biopharmaceutical
+  company headquartered in New Haven, Connecticut, developing first-in-class therapeutics
+  for common dermatologic and aesthetic conditions. Its lead program, VDPHL01, is an
+  oral, non-hormonal candidate for pattern hair loss in men and women, in Phase II/III
+  trials — the first oral pattern-hair-loss trials in nearly thirty years and the first
+  US trials in female pattern hair loss. A broader pipeline targets alopecia, warts,
+  molluscum contagiosum and atopic dermatitis. The company closed an oversubscribed
+  $150M Series C in October 2025 and completed a US IPO in February 2026 under the
+  ticker MANE. Veradermics operates no public developer program, developer portal, SDK
+  or documented API; the only machine-readable surfaces on its corporate host are
+  WordPress platform plumbing — an RFC 8414 / RFC 9728 OAuth discovery chain and an
+  auth-gated MCP server registered by the WordPress MCP Adapter.'
+image: https://veradermics.b-cdn.net/wp-content/uploads/2026/04/VERADERMICS-Website-OG-Option-1-2026APR23-V01-D.jpg
 url: https://raw.githubusercontent.com/api-evangelist/veradermics/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:secondary-market
-x-tier: stub
-x-tier-reason: harvest
+x-tier: profiled
+x-tier-reason: enriched
 specificationVersion: '0.20'
 created: '2026-09-02'
 modified: '2026-09-02'
 tags:
 - Company
+- Biotechnology
+- Pharmaceuticals
+- Life Sciences
+- Healthcare
+- Dermatology
+- Clinical Trials
+- Drug Development
 apis: []
 maintainers:
 - FN: Kin Lane
@@ -20,4 +38,52 @@ maintainers:
   email: info@apis.io
 common:
 - type: Website
-  url: https://forgeglobal.com/veradermics_stock/
+  url: https://www.veradermics.com/
+- type: TermsOfService
+  url: https://www.veradermics.com/terms-of-use/
+- type: PrivacyPolicy
+  url: https://www.veradermics.com/privacy-policy/
+- type: Support
+  url: https://www.veradermics.com/contact-us/
+- type: MCPServer
+  url: mcp/veradermics-mcp.yml
+- type: Authentication
+  url: authentication/veradermics-authentication.yml
+- type: OAuthScopes
+  url: scopes/veradermics-scopes.yml
+- type: WellKnown
+  url: well-known/veradermics-well-known.yml
+- type: Conformance
+  url: conformance/veradermics-conformance.yml
+- type: DomainSecurity
+  url: security/veradermics-domain-security.yml
+- type: LLMsTxt
+  url: llms/veradermics-llms.txt
+- type: Plans
+  url: plans/veradermics-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/veradermics-rate-limits.yml
+x-pointer-liveness:
+  checked: '2026-09-02'
+  probes:
+  - url: https://www.veradermics.com/
+    status: 200
+  - url: https://www.veradermics.com/terms-of-use/
+    status: 200
+  - url: https://www.veradermics.com/privacy-policy/
+    status: 200
+  - url: https://www.veradermics.com/contact-us/
+    status: 200
+  removed:
+  - url: https://forgeglobal.com/veradermics_stock/
+    type: Website
+    reason: >-
+      Third-party secondary-market venue listing, not the company's own site — the
+      "venue as Website" defect. Replaced with https://www.veradermics.com/. The Forge
+      page itself answers 403 behind a Cloudflare bot challenge to automated clients.
+    status: 403
+x-enrichment:
+  date: '2026-09-02'
+  status: enriched
+  artifacts_added: 11
+  pass: local-v1

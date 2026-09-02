@@ -1,0 +1,28 @@
+generated: '2026-09-02'
+method: probed
+source: https://www.veradermics.com/.well-known/oauth-authorization-server
+note: >-
+  Not derived from an OpenAPI — this provider publishes none — and not searched from a
+  docs scopes reference, because no developer documentation exists. The single scope
+  below is read verbatim from the scopes_supported array in the RFC 8414 metadata the
+  WordPress MCP Adapter serves on the corporate host, and is corroborated by the
+  scopes_supported array in the RFC 9728 protected-resource metadata.
+authorization_server: https://www.veradermics.com
+scopes:
+- name: mcp
+  description: >-
+    Grants a client access to the MCP server at
+    https://www.veradermics.com/wp-json/mcp/mcp-oauth-server. The authorization server
+    advertises no finer-grained scopes; what the scope actually authorizes depends on
+    the WordPress abilities exposed to the authenticated account, which could not be
+    enumerated anonymously.
+  source: scopes_supported
+  applies_to: https://www.veradermics.com/wp-json/mcp/mcp-oauth-server
+scope_count: 1
+x-evidence:
+  fetched: '2026-09-02'
+  probes:
+  - url: https://www.veradermics.com/.well-known/oauth-authorization-server
+    status: 200
+  - url: https://www.veradermics.com/.well-known/oauth-protected-resource
+    status: 200

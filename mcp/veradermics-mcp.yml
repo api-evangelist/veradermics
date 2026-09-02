@@ -1,0 +1,86 @@
+generated: '2026-09-02'
+method: probed
+source: https://www.veradermics.com/.well-known/oauth-protected-resource + https://www.veradermics.com/wp-json/mcp
+name: Veradermics MCP (WordPress MCP Adapter)
+status: live-but-gated
+deployment:
+  mode: remote
+  endpoint: https://www.veradermics.com/wp-json/mcp/mcp-oauth-server
+  auth: oauth
+  verified: probed
+provenance_caveat: >-
+  READ THIS BEFORE CITING. This MCP endpoint is real, live, and served from a host
+  Veradermics controls — it was found by probing, not inferred. It is NOT, however, a
+  Veradermics product API or a deliberate developer offering. Veradermics publishes no
+  developer portal, no API documentation and no reference to MCP anywhere on its site.
+  The endpoint is registered by the WordPress MCP Adapter running under the company's
+  corporate marketing site, alongside the WordPress Abilities API (wp-abilities/v1), and
+  its tool surface is therefore WordPress core and plugin abilities rather than anything
+  about dermatology, the VDPHL01 program, or clinical trials. Treat it as incidental
+  platform plumbing that happens to be agent-addressable.
+servers:
+- id: mcp-oauth-server
+  route: /wp-json/mcp/mcp-oauth-server
+  url: https://www.veradermics.com/wp-json/mcp/mcp-oauth-server
+  auth: oauth2-bearer
+  probe:
+    method: POST
+    body: '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+    http_status: 401
+    response: '{"code":"mcp_unauthorized","message":"MCP authentication required.","data":{"status":401}}'
+- id: mcp-adapter-default-server
+  route: /wp-json/mcp/mcp-adapter-default-server
+  url: https://www.veradermics.com/wp-json/mcp/mcp-adapter-default-server
+  auth: wordpress-session-or-application-password
+  probe:
+    method: POST
+    body: '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+    http_status: 401
+    response: '{"code":"rest_forbidden","message":"Sorry, you are not allowed to do that.","data":{"status":401}}'
+discovery:
+  wp_json_root: https://www.veradermics.com/wp-json/
+  namespace_index: https://www.veradermics.com/wp-json/mcp
+  namespace_index_status: 200
+  registered_routes:
+  - /mcp
+  - /mcp/mcp-oauth-server
+  - /mcp/mcp-adapter-default-server
+  abilities_api:
+    namespace: wp-abilities/v1
+    url: https://www.veradermics.com/wp-json/wp-abilities/v1/abilities
+    status: 401
+    note: >-
+      The WordPress Abilities API is the anonymous-readable analogue of tools/list on
+      this stack, and it is also gated here, so the ability set backing the MCP server
+      could not be enumerated without credentials.
+tools: []
+tools_note: >-
+  NOT ENUMERATED. Both tools/list probes returned 401 and the Abilities endpoint returned
+  401, so the live tool schemas require authenticated introspection with a WordPress
+  account on this site. No tool list is asserted here, and none was derived — there is no
+  OpenAPI for this provider to derive one from, and inventing WordPress-plugin tool names
+  would be fabrication.
+authorization:
+  authorization_server: https://www.veradermics.com
+  metadata: ../well-known/veradermics-oauth-authorization-server.json
+  protected_resource_metadata: ../well-known/veradermics-oauth-protected-resource.json
+  scopes:
+  - mcp
+  pkce: S256
+  grant_types:
+  - authorization_code
+  - refresh_token
+  client_registration: client_id_metadata_document
+x-evidence:
+  fetched: '2026-09-02'
+  probes:
+  - url: https://www.veradermics.com/.well-known/oauth-protected-resource
+    status: 200
+  - url: https://www.veradermics.com/wp-json/mcp
+    status: 200
+  - url: https://www.veradermics.com/wp-json/mcp/mcp-oauth-server
+    status: 401
+  - url: https://www.veradermics.com/wp-json/mcp/mcp-adapter-default-server
+    status: 401
+  - url: https://www.veradermics.com/wp-json/wp-abilities/v1/abilities
+    status: 401

@@ -1,0 +1,62 @@
+generated: '2026-09-02'
+method: probed
+source: https://www.veradermics.com/.well-known/oauth-authorization-server
+note: >-
+  Veradermics publishes no authentication documentation, because it publishes no
+  developer program. This profile is read entirely from the RFC 8414 / RFC 9728 metadata
+  documents the WordPress MCP Adapter serves on the corporate marketing host, and it
+  therefore describes access to that incidental MCP surface — not to any Veradermics
+  product API. Nothing here was derived from an OpenAPI: this provider publishes none.
+schemes:
+- id: oauth2_mcp
+  type: oauth2
+  flow: authorization_code
+  issuer: https://www.veradermics.com
+  authorization_endpoint: https://www.veradermics.com/oauth/authorize
+  token_endpoint: https://www.veradermics.com/oauth/token
+  revocation_endpoint: https://www.veradermics.com/oauth/revoke
+  response_types_supported:
+  - code
+  grant_types_supported:
+  - authorization_code
+  - refresh_token
+  code_challenge_methods_supported:
+  - S256
+  pkce_required: true
+  token_endpoint_auth_methods_supported:
+  - none
+  client_type: public
+  client_registration: >-
+    client_id_metadata_document_supported is true — clients identify themselves with a
+    hosted client-id metadata document rather than by pre-registration.
+  scopes:
+  - mcp
+  applies_to:
+  - https://www.veradermics.com/wp-json/mcp/mcp-oauth-server
+- id: wordpress_session
+  type: cookie-or-application-password
+  note: >-
+    The second registered MCP server, /wp-json/mcp/mcp-adapter-default-server, and the
+    wp-abilities/v1 namespace both answer 401 rest_forbidden to anonymous requests,
+    which is the WordPress core REST permission response — they expect a logged-in
+    session or an application password rather than the OAuth bearer above.
+  applies_to:
+  - https://www.veradermics.com/wp-json/mcp/mcp-adapter-default-server
+  - https://www.veradermics.com/wp-json/wp-abilities/v1/abilities
+anonymous_surface:
+  note: >-
+    The WordPress core REST namespace wp/v2 answers anonymously on this host for public
+    content (pages, types), which is default WordPress behaviour rather than a published
+    API. It is recorded for completeness and is not wired as a Veradermics API.
+  probes:
+  - url: https://www.veradermics.com/wp-json/wp/v2/pages?per_page=1
+    status: 200
+  - url: https://www.veradermics.com/wp-json/wp/v2/types
+    status: 200
+x-evidence:
+  fetched: '2026-09-02'
+  probes:
+  - url: https://www.veradermics.com/.well-known/oauth-authorization-server
+    status: 200
+  - url: https://www.veradermics.com/.well-known/oauth-protected-resource
+    status: 200

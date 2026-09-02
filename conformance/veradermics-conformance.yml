@@ -1,0 +1,93 @@
+generated: '2026-09-02'
+method: probed
+source: >-
+  https://www.veradermics.com/.well-known/oauth-authorization-server,
+  https://www.veradermics.com/.well-known/oauth-protected-resource,
+  https://www.veradermics.com/wp-json/mcp
+note: >-
+  Every assertion below is read from a document actually fetched during this pass. No
+  compliance claim was found anywhere on the Veradermics website — there is no trust
+  center, no certifications page, and no security page — so nothing is asserted about
+  SOC 2, ISO 27001 or HIPAA. Veradermics is a clinical-stage pharmaceutical company and
+  will be subject to FDA and HIPAA-adjacent regimes in the ordinary course, but it
+  publishes no artifact that evidences a program, and this pipeline does not assert
+  conformance it cannot evidence.
+conformance:
+- id: rfc8414
+  name: OAuth 2.0 Authorization Server Metadata
+  conforms: true
+  evidence:
+    url: https://www.veradermics.com/.well-known/oauth-authorization-server
+    status: 200
+    detail: >-
+      Document parses and carries issuer, authorization_endpoint, token_endpoint,
+      response_types_supported and grant_types_supported at the registered well-known
+      path.
+- id: rfc9728
+  name: OAuth 2.0 Protected Resource Metadata
+  conforms: true
+  evidence:
+    url: https://www.veradermics.com/.well-known/oauth-protected-resource
+    status: 200
+    detail: >-
+      Document parses and carries resource, authorization_servers, bearer_methods_supported
+      and scopes_supported, correctly pointing the MCP resource at the issuer above.
+- id: rfc7636
+  name: PKCE for OAuth Public Clients
+  conforms: true
+  evidence:
+    url: https://www.veradermics.com/.well-known/oauth-authorization-server
+    status: 200
+    detail: >-
+      code_challenge_methods_supported is ["S256"] and
+      token_endpoint_auth_methods_supported is ["none"], i.e. public clients with PKCE.
+- id: oauth2
+  name: OAuth 2.0 authorization code grant
+  conforms: true
+  evidence:
+    url: https://www.veradermics.com/.well-known/oauth-authorization-server
+    status: 200
+    detail: grant_types_supported ["authorization_code","refresh_token"].
+- id: mcp
+  name: Model Context Protocol
+  conforms: partial
+  evidence:
+    url: https://www.veradermics.com/wp-json/mcp/mcp-oauth-server
+    status: 401
+    detail: >-
+      An MCP server is registered and reachable and its OAuth discovery chain is
+      complete and standards-shaped, but a JSON-RPC tools/list probe returns 401, so
+      protocol conformance beyond the authorization handshake could not be verified
+      anonymously.
+- id: oidc
+  name: OpenID Connect Discovery
+  conforms: false
+  evidence:
+    url: https://www.veradermics.com/.well-known/openid-configuration
+    status: 404
+    detail: No OpenID Provider configuration is served; the OAuth server is not an OP.
+- id: rfc9116
+  name: security.txt
+  conforms: false
+  evidence:
+    url: https://www.veradermics.com/.well-known/security.txt
+    status: 404
+    detail: No security.txt is served on either host.
+- id: rfc9457
+  name: Problem Details for HTTP APIs
+  conforms: false
+  evidence:
+    url: https://www.veradermics.com/wp-json/mcp/mcp-oauth-server
+    status: 401
+    detail: >-
+      Errors use the WordPress REST envelope {code,message,data:{status}} with
+      Content-Type application/json, not application/problem+json.
+domain_standard:
+  assessed: true
+  found: false
+  note: >-
+    Veradermics operates in pharmaceutical R&D, where the relevant domain standards
+    would be CDISC (SDTM/ADaM/Define-XML), HL7 FHIR, or ClinicalTrials.gov / CTIS
+    registry interchange. None is declared by any contract this company publishes,
+    because it publishes no contract. REWARD-ONLY dimension — recorded as absent, not
+    as a failure.

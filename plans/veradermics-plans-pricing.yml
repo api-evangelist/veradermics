@@ -1,0 +1,18 @@
+generated: '2026-09-02'
+method: searched
+source: https://www.veradermics.com/sitemap.xml
+plan_count: 0
+note: >-
+  Veradermics publishes no pricing or plans of any kind, for an API or otherwise. It is a
+  clinical-stage pharmaceutical company with no commercial product on the market; its
+  lead candidate VDPHL01 is in Phase II/III trials and is not approved or sold. The
+  entire published site is eleven pages (home, about, pipeline, VDPHL01, pattern hair
+  loss, clinical trials, careers, contact, terms, privacy, Washington State privacy) —
+  there is no pricing page to read. This is an honest zero, not an unchecked field.
+x-evidence:
+  fetched: '2026-09-02'
+  probes:
+  - url: https://www.veradermics.com/sitemap.xml
+    status: 200
+  - url: https://www.veradermics.com/pricing/
+    status: 404

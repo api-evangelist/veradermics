@@ -1,0 +1,26 @@
+generated: '2026-09-02'
+method: probed
+source: >-
+  Response headers observed on https://www.veradermics.com/wp-json/wp/v2/pages?per_page=1
+  plus a search of the whole published site for a limits page.
+limit_count: 0
+note: >-
+  Veradermics documents no rate limits, because it documents no API. The only reachable
+  machine surface on the host is the WordPress core REST API and the auth-gated MCP
+  server, and neither returns any rate-limit signalling: a live anonymous request to
+  /wp-json/wp/v2/pages returned no X-RateLimit-*, no RateLimit-* and no Retry-After
+  header. An agent calling this host has no runtime budget signal at all. Honest zero.
+scopes: []
+response_headers:
+  observed: []
+  x_ratelimit_family: absent
+  ratelimit_family: absent
+  retry_after: absent
+exhaustion_status: unknown
+x-evidence:
+  fetched: '2026-09-02'
+  probes:
+  - url: https://www.veradermics.com/wp-json/wp/v2/pages?per_page=1
+    status: 200
+  - url: https://www.veradermics.com/wp-json/mcp/mcp-oauth-server
+    status: 401
